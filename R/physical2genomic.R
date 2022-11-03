@@ -1,7 +1,7 @@
 ## a function to estimate genomic loci from the physical loci based on sliding winows and gene frequencey
 physical2genomic <- function(input,chr_stat=NULL,chr_length=NULL,window_size=NULL)
 {								
-	b1 = read.table(input,sep = "\t",quote = "", , stringsAsFactors=T)				#reading gff file
+	b1 = read.table(input,sep = "\t",quote = "", stringsAsFactors=T)				#reading gff file
 	b2 = b1[b1$V3=='gene',]										#extracting only gene features
 	b3 = b2[order(b2$V5),]										#sorting gene ends
 	b4 = b3[order(b3$V1),]										#sorting chromsomes
