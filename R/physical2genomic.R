@@ -1,7 +1,7 @@
 ## a function to estimate genomic loci from the physical loci based on sliding winows and gene frequencey
-physical2genomic <- function(input,chr_stat,chr_length,window_size)
+physical2genomic <- function(input,chr_stat=NULL,chr_length=NULL,window_size=NULL)
 {								
-	b1 = read.table(input,sep = "\t",quote = "")				#reading gff file
+	b1 = read.table(input,sep = "\t",quote = "", , stringsAsFactors=T)				#reading gff file
 	b2 = b1[b1$V3=='gene',]										#extracting only gene features
 	b3 = b2[order(b2$V5),]										#sorting gene ends
 	b4 = b3[order(b3$V1),]										#sorting chromsomes
@@ -10,7 +10,7 @@ physical2genomic <- function(input,chr_stat,chr_length,window_size)
 	b5 = b4[,c(1,4,5)]											#extracting dataframe of genes' IDs (record names),chromosome, gene start, gene end
 	colnames(b5) = c('chr','start','end')						#naming the data frame columns
 	test_cs = FALSE
-	if (missing(chr_stat))										#checking if the chromosome size file is exist, otherwise the chromosome size will calculated based on the end locus (bp) of the last gene
+	if (is.null(chr_stat))										#checking if the chromosome size file is exist, otherwise the chromosome size will calculated based on the end locus (bp) of the last gene
 	{
 		test_cs = TRUE
 	}
@@ -21,7 +21,7 @@ physical2genomic <- function(input,chr_stat,chr_length,window_size)
 	}
 	#checking if the chromsome length in CM was given, otherwise 100 CM will be used as default for all chromsomes
 	
-	if (missing(chr_length))									
+	if (is.null(chr_length))									
 	{
 		cl = 100
 	}
@@ -33,7 +33,7 @@ physical2genomic <- function(input,chr_stat,chr_length,window_size)
 		}
 	}
 	#checking if the window size was given, otherwise 100,000 bp will be used as default
-	if (missing(window_size))
+	if (is.null(window_size))
 	{
 		wz=100000
 	}
@@ -42,7 +42,7 @@ physical2genomic <- function(input,chr_stat,chr_length,window_size)
 		wz=window_size
 	}
 	B9 = list()													# a vector is set to hold output data structure
-	if(!missing(chr_length) && is.numeric(chr_length) == FALSE && !missing(chr_stat))
+	if(!is.null(chr_length) && is.numeric(chr_length) == FALSE && !is.null(chr_stat))
 	{
 	    CSs = chr_sizes
 	    CLs = read.table(chr_length)
@@ -68,7 +68,7 @@ physical2genomic <- function(input,chr_stat,chr_length,window_size)
 		}
 		
 		#reading chrosomes' lengths from the input 'chr_length' file if it is not numeric.
-		if(!missing(chr_length) && is.numeric(chr_length) == FALSE)
+		if(!is.null(chr_length) && is.numeric(chr_length) == FALSE)
 		{
 			cl2 = read.table(chr_length)
 			colnames(cl2) = c('id','length')
